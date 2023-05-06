@@ -194,16 +194,16 @@
         const avgWordLength = averageWordLength(inputText);
 
         analysisResults.innerHTML = `
-  <h2>Analysis Results:</h2>
-  <p>Number of words: ${numWords}</p>
-  <p>Number of characters: ${numChars}</p>
-  <p>Number of sentences: ${numSentences}</p>
-  <p>Number of paragraphs: ${numParagraphs}</p>
-  <p>Longest word: ${longestWord}</p>
-  <p>Shortest word: ${shortestWord}</p>
-  <p>Average word length: ${avgWordLength.toFixed(2)}</p>
-  <p>Word frequency: <pre>${JSON.stringify(wordFreq, null, 2)}</pre></p>
-`;
+          <h2>Analysis Results:</h2>
+          <p>Number of words: ${numWords}</p>
+          <p>Number of characters: ${numChars}</p>
+          <p>Number of sentences: ${numSentences}</p>
+          <p>Number of paragraphs: ${numParagraphs}</p>
+          <p>Longest word: ${longestWord}</p>
+          <p>Shortest word: ${shortestWord}</p>
+          <p>Average word length: ${avgWordLength.toFixed(2)}</p>
+          <p>Word frequency: <pre>${JSON.stringify(wordFreq, null, 2)}</pre></p>
+        `;
       }
     </script>
   </body>
