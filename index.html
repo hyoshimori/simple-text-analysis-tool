@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        /* background-color: #f0f0f0; */
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+      }
+
+      #text-analysis-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 20px;
+      }
+
+      textarea {
+        resize: none;
+        font-size: 16px;
+        padding: 10px;
+      }
+
+      button {
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        margin-top: 10px;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      #analysis-results {
+        margin: 20px;
+      }
+
+      h2 {
+        margin-bottom: 10px;
+      }
+
+      p {
+        margin: 5px 0;
+      }
+    </style>
+
+    <title>Text Analysis Tool</title>
+  </head>
+  <body>
+    <h1>Text Analysis Tool</h1>
+    <form id="text-analysis-form">
+      <label for="input-text">Enter your text:</label><br />
+      <textarea id="input-text" name="input-text" rows="10" cols="50"></textarea
+      ><br />
+      <button type="button" onclick="analyzeText()">Analyze Text</button>
+    </form>
+    <div id="analysis-results"></div>
+    <script>
+      // Text analysis functions
+      function wordFrequency(text) {
+        const words = text.toLowerCase().match(/\b\w+\b/g);
+        const freqMap = {};
+        words.forEach((word) => {
+          if (freqMap[word] >= 1) {
+            freqMap[word]++;
+          } else {
+            freqMap[word] = 1;
+          }
+        });
+
+        for (let key in freqMap) {
+          if (freqMap[key] < 3) {
+            delete freqMap[key];
+          }
+        }
+
+        const sorted = Object.entries(freqMap).sort((a, b) => b[1] - a[1]);
+        console.log(sorted);
+        return freqMap;
+      }
+
+      // function characterFrequency(text) {
+      //   const chars = text.toLowerCase().replace(/[^a-z]/g, '');
+      //   const freqMap = {};
+      //   chars.split('').forEach((char) => {
+      //     if (freqMap[char]) {
+      //       freqMap[char]++;
+      //     } else {
+      //       freqMap[char] = 1;
+      //     }
+      //   });
+      //   return freqMap;
+      // }
+
+      function highlightPronouns(text) {
+        const basicEnglish = [
+          "i",
+          "you",
+          "he",
+          "she",
+          "it",
+          "we",
+          "they",
+          "am",
+          "is",
+          "are",
+          "was",
+          "were",
+          "be",
+          "been",
+          "have",
+          "has",
+          "had",
+          "use",
+          "find",
+        ];
+        const words = text.match(/\b\w+\b/g);
+        const highlighted = words.map((word) => {
+          if (basicEnglish.includes(word.toLowerCase())) {
+            return `<span class="pronoun">${word}</span>`;
+          }
+          return word;
+        });
+        return highlighted.join(" ");
+      }
+
+      function countWords(text) {
+        const words = text.match(/\b\w+\b/g);
+        return words ? words.length : 0;
+      }
+
+      function countCharacters(text) {
+        return text.replace(/\s+/g, "").length;
+      }
+
+      function countSentences(text) {
+        const sentences = text.match(/[^.!?]+[.!?]+/g);
+        return sentences ? sentences.length : 0;
+      }
+
+      function countParagraphs(text) {
+        const paragraphs = text.split("\n");
+        return paragraphs.filter((p) => p.trim().length > 0).length;
+      }
+
+      function findLongestWord(text) {
+        const words = text.match(/\b\w+\b/g);
+        return words.reduce((a, b) => (a.length > b.length ? a : b));
+      }
+
+      function findShortestWord(text) {
+        const words = text.match(/\b\w+\b/g);
+        return words.reduce((a, b) => (a.length < b.length ? a : b));
+      }
+
+      function averageWordLength(text) {
+        const words = text.match(/\b\w+\b/g);
+        const totalLength = words.reduce((sum, word) => sum + word.length, 0);
+        return totalLength / words.length;
+      }
+
+      function analyzeText() {
+        const inputText = document.getElementById("input-text").value;
+        const analysisResults = document.getElementById("analysis-results");
+
+        const wordFreq = wordFrequency(inputText);
+        // const charFreq = characterFrequency(inputText);
+        const numWords = countWords(inputText);
+        const numChars = countCharacters(inputText);
+        const numSentences = countSentences(inputText);
+        const numParagraphs = countParagraphs(inputText);
+        const longestWord = findLongestWord(inputText);
+        const shortestWord = findShortestWord(inputText);
+        const avgWordLength = averageWordLength(inputText);
+
+        analysisResults.innerHTML = `
+  <h2>Analysis Results:</h2>
+  <p>Number of words: ${numWords}</p>
+  <p>Number of characters: ${numChars}</p>
+  <p>Number of sentences: ${numSentences}</p>
+  <p>Number of paragraphs: ${numParagraphs}</p>
+  <p>Longest word: ${longestWord}</p>
+  <p>Shortest word: ${shortestWord}</p>
+  <p>Average word length: ${avgWordLength.toFixed(2)}</p>
+  <p>Word frequency: <pre>${JSON.stringify(wordFreq, null, 2)}</pre></p>
+`;
+      }
+    </script>
+  </body>
+</html>
